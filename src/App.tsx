@@ -22,13 +22,14 @@ const INITIAL_VIEW_STATE = {
 
 // Data to be used by the LineLayer
 const data = [
-  {sourcePosition: [-122.41669, 37.7853], targetPosition: [-122.41669, 37.781]}
+  {sourcePosition: [-122.41669, 37.7653], targetPosition: [-122.42669, 37.781]},
+  {sourcePosition: [-122.41669, 37.7753], targetPosition: [-122.41669, 37.781]}
 ];
 
 // DeckGL react component
 function Map() {
   const layers = [
-    new LineLayer({id: 'line-layer', data})
+    new LineLayer({id: 'line-layer', data}),
   ];
 
   return (
