@@ -1,6 +1,6 @@
 import React from 'react';
 import DeckGL from '@deck.gl/react';
-import {LineLayer} from '@deck.gl/layers';
+import {LineLayer, ScatterplotLayer} from '@deck.gl/layers';
 import {StaticMap} from 'react-map-gl';
 
 function App() {
@@ -26,9 +26,23 @@ const data = [
   {sourcePosition: [-122.41669, 37.7753], targetPosition: [-122.41669, 37.781]}
 ];
 
+const layer = new ScatterplotLayer({
+  id: 'bart-stations',
+  data: [
+    {name: 'Colma', passengers: 4214, coordinates: [-122.466233, 37.684638]},
+    {name: 'Civic Center', passengers: 24798, coordinates: [-122.413756,37.779528]},
+  ],
+  stroked: false,
+  filled: true,
+  getPosition: (d: any) => d.coordinates,
+  getRadius: (d: any) => 1000,
+  getFillColor: [255, 200, 0]
+});
+
 // DeckGL react component
 function Map() {
   const layers = [
+    layer,
     new LineLayer({id: 'line-layer', data}),
   ];
 
