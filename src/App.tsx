@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import DeckGL from '@deck.gl/react';
 import {LineLayer, ScatterplotLayer} from '@deck.gl/layers';
+import {TripsLayer} from '@deck.gl/geo-layers';
 import {StaticMap} from 'react-map-gl';
 
 import { bart } from './data/bart'
+import tripsData from './data/trips'
 
 function App() {
   return (
@@ -39,8 +41,45 @@ const layer = new ScatterplotLayer({
 });
 
 // DeckGL react component
-function Map() {
+function Map({
+  // buildings = DATA_URL.BUILDINGS,
+  trips = tripsData,
+  trailLength = 180,
+  initialViewState = INITIAL_VIEW_STATE,
+  // mapStyle = MAP_STYLE,
+  // theme = DEFAULT_THEME,
+  loopLength = 1800, // unit corresponds to the timestamp in source data
+  animationSpeed = 20
+}) {
+  const [time, setTime] = useState(0);
+  const [animation] = useState<{ id?: any }>({});
+
+  const animate = () => {
+    setTime(t => (t + animationSpeed) % loopLength);
+    animation.id = window.requestAnimationFrame(animate);
+  };
+
+  useEffect(
+    () => {
+      animation.id = window.requestAnimationFrame(animate);
+      return () => window.cancelAnimationFrame(animation.id);
+    },
+    [animation]
+  );
+
   const layers = [
+    new TripsLayer({
+      id: 'trips',
+      data: trips,
+      getPath: (d: any) => d.path,
+      getTimestamps: d => d.timestamps,
+      getColor: d => [253, 128, 93],
+      opacity: 0.3,
+      widthMinPixels: 2,
+      rounded: true,
+      trailLength,
+      currentTime: time,
+    }),
     layer,
     new LineLayer({id: 'line-layer', data}),
   ];
