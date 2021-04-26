@@ -3,6 +3,8 @@ import DeckGL from '@deck.gl/react';
 import {LineLayer, ScatterplotLayer} from '@deck.gl/layers';
 import {StaticMap} from 'react-map-gl';
 
+import { bart } from './data/bart'
+
 function App() {
   return (
     <div className="App">
@@ -28,10 +30,7 @@ const data = [
 
 const layer = new ScatterplotLayer({
   id: 'bart-stations',
-  data: [
-    {name: 'Colma', passengers: 4214, coordinates: [-122.466233, 37.684638]},
-    {name: 'Civic Center', passengers: 24798, coordinates: [-122.413756,37.779528]},
-  ],
+  data: bart,
   stroked: false,
   filled: true,
   getPosition: (d: any) => d.coordinates,
